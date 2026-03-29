@@ -1,25 +1,6 @@
 --> CREDITS to Cappuccino v6 by blu
 
-local function getExploit()
-    if syn and type(syn.protect_gui) == 'function' then
-        return 'synapse'
-    else
-        return 'krnl'
-    end
-end
-
-local exploit = getExploit()
-
-if exploit == 'krnl' then
-    getgenv().syn = {
-        request = function(s)
-            return http_request(s)
-        end
-    }
-end
-
 getgenv().version = 'v1.1'
-print('UI library made by boop71 // version: '..version)
 
 local function instance(className,properties,children,funcs) local object = Instance.new(className,parent);for i,v in pairs(properties or {}) do object[i] = v;end;for i, self in pairs(children or {}) do self.Parent = object;end;for i,func in pairs(funcs or {}) do func(object);end;return object end
 local function ts(object,tweenInfo,properties) if tweenInfo[2] and typeof(tweenInfo[2]) == 'string' then tweenInfo[2] = Enum.EasingStyle[ tweenInfo[2] ];end;game:service('TweenService'):create(object, TweenInfo.new(unpack(tweenInfo)), properties):Play();end
@@ -36,9 +17,9 @@ local json = {
     end
 }
 
-if not blurModule then
-    getgenv().blurModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/boop71/some-useless-code/main/blurmodule.lua"))()
-end
+-- if not blurModule then
+--     getgenv().blurModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/boop71/some-useless-code/main/blurmodule.lua"))()
+-- end
 
 local bKeys = {'W','A','S','D','Space','Escape','RightShift', 'Return'}
 
@@ -46,15 +27,13 @@ local function scale(unscaled, minAllowed, maxAllowed, min, max)
     return (maxAllowed - minAllowed) * (unscaled - min) / (max - min) + minAllowed
 end
 
-setreadonly(table, false)
-table.len = function(t)
+local function tableLen(t)
     local c = 0
-    for a,v in next, t do
-        c = c + 1
+    for _ in pairs(t) do
+        c += 1
     end
     return c
 end
-setreadonly(table, true)
 
 if not game:service('Lighting'):FindFirstChild('cap_blur') then
     instance('DepthOfFieldEffect', {
@@ -332,7 +311,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -421,7 +400,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -556,7 +535,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -759,7 +738,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -794,7 +773,7 @@ local create = { --all ui library features
         v2.options = typeof(v2.options) == 'table' and v2.options or {}
         v2.callback = typeof(v2.callback) == 'function' and v2.callback or function() end
 
-        local size = 36 + (24 * table.len(v2.options))
+        local size = 36 + (24 * tableLen(v2.options))
 
         local tsize = (game:service('TextService'):GetTextSize(v2.text, 13, 'Gotham', Vector2.new(math.huge, math.huge))).X / 2
 
@@ -855,7 +834,7 @@ local create = { --all ui library features
         end
 
         local c = 0
-        for a=1,table.len(v2.options) do
+        for a=1,tableLen(v2.options) do
             local v = v2.options[a]
 
             c = c + 1
@@ -898,7 +877,7 @@ local create = { --all ui library features
                 })
             })
 
-            if c < table.len(v2.options) then
+            if c < tableLen(v2.options) then
                 instance('Frame', {
                     Parent = frame,
                     Size = udim2(1, -16, 0, 1),
@@ -959,7 +938,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -1139,7 +1118,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -1275,7 +1254,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -1894,7 +1873,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -2143,7 +2122,7 @@ local create = { --all ui library features
                 dropMain.Visible = true
                 dropMain.Position = udim2(0, body.AbsolutePosition.X + 350, 0, body.AbsolutePosition.Y)
                 ts(dropMain, {0.3, 'Exponential'}, {
-                    Size = udim2(0, 200, 0, 18 + (table.len(v2.options) * 26))
+                    Size = udim2(0, 200, 0, 18 + (tableLen(v2.options) * 26))
                 })
                 ts(body.Frame.TextLabel, {0.2, 'Exponential'}, {
                     TextTransparency = 1,
@@ -2217,7 +2196,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until table.len(getgenv().tipMenu) == 3
+            until tableLen(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -2409,11 +2388,11 @@ local function new(data) --main library function
     })
 
 
-    blurModule:BindFrame(toolTip.blur, {
-        Transparency = 0.999,
-        Material = 'Glass',
-        Color = rgb(255, 255, 255)
-    })
+    -- blurModule:BindFrame(toolTip.blur, {
+    --     Transparency = 0.999,
+    --     Material = 'Glass',
+    --     Color = rgb(255, 255, 255)
+    -- })
 
     getgenv().tipMenu = {
         open = function()
@@ -2750,13 +2729,13 @@ local function new(data) --main library function
         })
         dragify(tabWindow)
 
-        if data.theme.blur == true then
-            blurModule:BindFrame(tabWindow.blur, {
-                Transparency = 0.999,
-                Material = 'Glass',
-                Color = rgb(255, 255, 255)
-            })
-        end
+        -- if data.theme.blur == true then
+        --     blurModule:BindFrame(tabWindow.blur, {
+        --         Transparency = 0.999,
+        --         Material = 'Glass',
+        --         Color = rgb(255, 255, 255)
+        --     })
+        -- end
 
         local cont = tabWindow.container.ScrollingFrame
 
@@ -3021,15 +3000,15 @@ local function new(data) --main library function
                 function(self)
                     if data.theme.blur == true then
                         spawn(function()
-                            repeat
-                                local a = pcall(function()
-                                    blurModule:BindFrame(self, {
-                                        Transparency = 0.999,
-                                        Material = 'Glass',
-                                        Color = rgb(255, 255, 255)
-                                    })
-                                end)
-                            until a
+                            -- repeat
+                            --     local a = pcall(function()
+                            --         blurModule:BindFrame(self, {
+                            --             Transparency = 0.999,
+                            --             Material = 'Glass',
+                            --             Color = rgb(255, 255, 255)
+                            --         })
+                            --     end)
+                            -- until a
                         end)
                     end
                 end
@@ -3047,3 +3026,124 @@ local function new(data) --main library function
 end
 
 return new 
+    end
+    local libSource = test() --loadstring(game:HttpGet("https://raw.githubusercontent.com/Veurrr/Symmetrical/refs/heads/main/lib.lua"))() --the ui source MIGHT work, its certainly much newer than what i sent you
+
+    local function createLib(b, c)
+        local d = {
+            theme = c,
+            tabs = {},
+        }
+        function d:Tab(e, f, g)
+            g = typeof(g) == "table" and g or nil
+            e = typeof(e) == "string" and e or "tab"
+            f = typeof(f) == "string" and "rbxassetid://" .. f or "nil"
+            local h = {}
+            local i = {
+                name = e,
+                size = g,
+                icon = f,
+                content = {},
+            }
+            table.insert(d.tabs, i)
+            function h:Button(d)
+                d.type = "button"
+                table.insert(i.content, d)
+            end
+            function h:Toggle(d)
+                d.type = "toggle"
+                table.insert(i.content, d)
+            end
+            function h:Togglebind(d)
+                d.type = "togglebind"
+                table.insert(i.content, d)
+            end
+            function h:Keybind(d)
+                d.type = "keybind"
+                table.insert(i.content, d)
+            end
+            function h:Databox(d)
+                d.type = "databox"
+                table.insert(i.content, d)
+            end
+            function h:Dropdown(d)
+                d.type = "dropdown"
+                table.insert(i.content, d)
+            end
+            function h:Colorpicker(d)
+                d.type = "colorpicker"
+                table.insert(i.content, d)
+            end
+            function h:Locked(d)
+                d.type = "locked"
+                table.insert(i.content, d)
+            end
+            function h:Textlabel(d)
+                d.type = "textlabel"
+                table.insert(i.content, d)
+            end
+            function h:Slider(d)
+                d.type = "slider"
+                table.insert(i.content, d)
+            end
+            function h:Textbox(d)
+                d.type = "textbox"
+                table.insert(i.content, d)
+            end
+            function h:Folder(f, j)
+                local k = {
+                    type = "folder",
+                    name = f,
+                    size = j,
+                    content = {},
+                }
+                local l = {}
+                table.insert(i.content, k)
+                function l:Button(d)
+                    d.type = "button"
+                    table.insert(k.content, d)
+                end
+                function l:Toggle(d)
+                    d.type = "toggle"
+                    table.insert(k.content, d)
+                end
+                function l:Togglebind(d)
+                    d.type = "togglebind"
+                    table.insert(k.content, d)
+                end
+                function l:Keybind(d)
+                    d.type = "keybind"
+                    table.insert(k.content, d)
+                end
+                function l:Databox(d)
+                    d.type = "databox"
+                    table.insert(k.content, d)
+                end
+                function l:Dropdown(d)
+                    d.type = "dropdown"
+                    table.insert(k.content, d)
+                end
+                function l:Colorpicker(d)
+                    d.type = "colorpicker"
+                    table.insert(k.content, d)
+                end
+                function l:Textlabel(d)
+                    d.type = "textlabel"
+                    table.insert(k.content, d)
+                end
+                function l:Slider(d)
+                    d.type = "slider"
+                    table.insert(k.content, d)
+                end
+                function l:Textbox(d)
+                    d.type = "textbox"
+                    table.insert(k.content, d)
+                end
+                return l
+            end
+            return h
+        end
+        function d:Init()
+            b(d)
+        end
+        return d
