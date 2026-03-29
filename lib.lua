@@ -1651,7 +1651,7 @@ local create = { --all ui library features
                             break
                         end
                         H = a
-                        v2.callback(Color3.fromHSV(H, S, V))
+                        v2.callback(H, S, V)
                         ts(body.Frame, {0.3, 'Exponential'}, {
                             BackgroundColor3 = Color3.fromHSV(H, S, V)
                         })
