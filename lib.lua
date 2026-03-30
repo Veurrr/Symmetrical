@@ -1,6 +1,7 @@
---> CREDITS to Cappuccino v6 by blu
+--> CREDITS to Cappuccino v6 by blu, hiiii <3
 
 getgenv().version = 'v1.1'
+print('UI library made by boop71 // version: '..version)
 
 local function instance(className,properties,children,funcs) local object = Instance.new(className,parent);for i,v in pairs(properties or {}) do object[i] = v;end;for i, self in pairs(children or {}) do self.Parent = object;end;for i,func in pairs(funcs or {}) do func(object);end;return object end
 local function ts(object,tweenInfo,properties) if tweenInfo[2] and typeof(tweenInfo[2]) == 'string' then tweenInfo[2] = Enum.EasingStyle[ tweenInfo[2] ];end;game:service('TweenService'):create(object, TweenInfo.new(unpack(tweenInfo)), properties):Play();end
@@ -2238,7 +2239,6 @@ local create = { --all ui library features
                 TextColor3 = v2.color,
                 BackgroundTransparency = 1,
                 Text = v2.text,
-                RichText = true,
                 TextColor3 = v2.color,
                 Size = v2.align == 'center' and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0),
                 Position = udim2(0, v2.align == 'left' and 10 or 0, 0, 0),
