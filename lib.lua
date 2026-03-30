@@ -2238,6 +2238,7 @@ local create = { --all ui library features
                 TextColor3 = v2.color,
                 BackgroundTransparency = 1,
                 Text = v2.text,
+                RichText = true,
                 TextColor3 = v2.color,
                 Size = v2.align == 'center' and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0),
                 Position = udim2(0, v2.align == 'left' and 10 or 0, 0, 0),
