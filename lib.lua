@@ -2269,11 +2269,11 @@ local create = { --all ui library features
                 v2.thickness = thickness
             end
         end
-
+        print(body.Text)
         body.Parent = obj
         local d = {}
         function d:SetText(str)
-            body.text.Text = tostring(str)
+            body.Text = tostring(str)
         end
         
         return d
