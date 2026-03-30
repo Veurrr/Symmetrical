@@ -2271,11 +2271,12 @@ local create = { --all ui library features
         end
 
         body.Parent = obj
-        return {
-            SetText = function(newText)
-                body.text.Text = tostring(newText)
-            end
-        }
+        local d = {}
+        function d:SetText(str)
+            body.text.Text = tostring(str)
+        end
+        
+        return d
     end,
     locked = function(v2, data, obj)
         v2.text = typeof(v2.text) == 'string' and v2.text or '[empty name]'
