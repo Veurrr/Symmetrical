@@ -1,11 +1,12 @@
 local PlayerGui = game.Players.LocalPlayer.PlayerGui
+local Replicated = game:GetService("ReplicatedStorage")
 local ScreenGui = PlayerGui:FindFirstChild("ScreenGui")
 local MerchShopButton = ScreenGui:FindFirstChild("MerchShopButton")
 local ValentinesQuestButton = ScreenGui:FindFirstChild("ValentinesQuestButton")
 local AdPlushButton = ScreenGui:FindFirstChild("AdPlushButton")
 
 if MerchShopButton and ValentinesQuestButton and AdPlushButton then
-    MerchShopButton:Destroy()
-    ValentinesQuestButton:Destroy()
-    AdPlushButton:Destroy()
+    MerchShopButton.Parent = Replicated
+    ValentinesQuestButton.Parent = Replicated
+    AdPlushButton.Parent = Replicated
 end
