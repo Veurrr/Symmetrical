@@ -1,8 +1,8 @@
 local PlayerGui = game.Players.LocalPlayer.PlayerGui
 local ScreenGui = PlayerGui:FindFirstChild("ScreenGui")
 local MerchShopButton = ScreenGui:FindFirstChild("MerchShopButton")
-local ValentinesQuestButton = ScreenGui:FindFirstChild("MerchShopButton")
-local AdPlushButton = ScreenGui:FindFirstChild("MerchShopButton")
+local ValentinesQuestButton = ScreenGui:FindFirstChild("ValentinesQuestButton")
+local AdPlushButton = ScreenGui:FindFirstChild("AdPlushButton")
 
 if MerchShopButton and ValentinesQuestButton and AdPlushButton then
     MerchShopButton:Destroy()
