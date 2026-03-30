@@ -1,25 +1,34 @@
 --> CREDITS to Cappuccino v6 by blu
 
+local function getExploit()
+    if syn and type(syn.protect_gui) == 'function' then
+        return 'synapse'
+    else
+        return 'krnl'
+    end
+end
+
+local exploit = getExploit()
+
+if exploit == 'krnl' then
+    getgenv().syn = {
+        request = function(s)
+            return http_request(s)
+        end
+    }
+end
+
 getgenv().version = 'v1.1'
+print('UI library made by boop71 // version: '..version)
 
 local function instance(className,properties,children,funcs) local object = Instance.new(className,parent);for i,v in pairs(properties or {}) do object[i] = v;end;for i, self in pairs(children or {}) do self.Parent = object;end;for i,func in pairs(funcs or {}) do func(object);end;return object end
 local function ts(object,tweenInfo,properties) if tweenInfo[2] and typeof(tweenInfo[2]) == 'string' then tweenInfo[2] = Enum.EasingStyle[ tweenInfo[2] ];end;game:service('TweenService'):create(object, TweenInfo.new(unpack(tweenInfo)), properties):Play();end
 local function udim2(x1,x2,y1,y2) local t = tonumber;return UDim2.new(t(x1),t(x2),t(y1),t(y2)) end
 local function rgb(r,g,b) return Color3.fromRGB(r,g,b);end
 
-local http = game:service('HttpService')
-local json = {
-    encode = function(body)
-        return http:JSONEncode(body)
-    end,
-    decode = function(body)
-        return http:JSONDecode(body)
-    end
-}
-
--- if not blurModule then
---     getgenv().blurModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/boop71/some-useless-code/main/blurmodule.lua"))()
--- end
+if not blurModule then
+    --getgenv().blurModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/boop71/some-useless-code/main/blurmodule.lua"))()
+end
 
 local bKeys = {'W','A','S','D','Space','Escape','RightShift', 'Return'}
 
@@ -27,13 +36,15 @@ local function scale(unscaled, minAllowed, maxAllowed, min, max)
     return (maxAllowed - minAllowed) * (unscaled - min) / (max - min) + minAllowed
 end
 
-local function tableLen(t)
+setreadonly(table, false)
+table.len = function(t)
     local c = 0
-    for _ in pairs(t) do
-        c += 1
+    for a,v in next, t do
+        c = c + 1
     end
     return c
 end
+setreadonly(table, true)
 
 if not game:service('Lighting'):FindFirstChild('cap_blur') then
     instance('DepthOfFieldEffect', {
@@ -64,39 +75,6 @@ for a,v in next, bKeys do
 end
 bKeys = p
 p = nil
-
-if not isfolder('cappuccino-v6') then
-    makefolder('cappuccino-v6')
-end
-
-if not cap then
-    getgenv().cap = {
-        write = function(fileName, content)
-            writefile(('cappuccino-v6/%s'):format(fileName), content)
-        end,
-        read = function(fileName)
-            return readfile(('cappuccino-v6/%s'):format(fileName))
-        end,
-        isfile = function(fileName)
-            return isfile(('cappuccino-v6/%s'):format(fileName))
-        end
-    }
-end
-
-if not cap.isfile('ui_settings.json') then
-    cap.write('ui_settings.json', json.encode({
-        theme = {124, 170, 255},
-        rainbowSpeed = 15,
-        blurLevel = 0.8,
-        protectUi = false,
-        showWatermark = false,
-        hidePremium = false,
-        tabAlignment = 'Left',
-        tabRoundness = 16,
-    }))
-end
-
-local gd = json.decode(cap.read('ui_settings.json'))
 
 local mouse = game:service('Players').LocalPlayer:GetMouse()
 
@@ -173,11 +151,6 @@ local function getRel(object)
     }
 end
 
-local function getTheme()
-    local t = json.decode(cap.read('ui_settings.json')).theme
-    return Color3.fromRGB(t[1], t[2], t[3])
-end
-
 local function bubble(object, color)
     local rel = getRel(object)
 
@@ -186,7 +159,7 @@ local function bubble(object, color)
         Size = udim2(0, 0, 0, 0),
         Position = udim2(0, rel.X, 0, rel.Y),
         BackgroundTransparency = 0,
-        BackgroundColor3 = getTheme(),
+        --BackgroundColor3 = getTheme(),
     }, {
         instance('UICorner', {
             CornerRadius = UDim.new(1, 0)
@@ -311,7 +284,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -400,7 +373,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -535,7 +508,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -738,7 +711,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -773,7 +746,7 @@ local create = { --all ui library features
         v2.options = typeof(v2.options) == 'table' and v2.options or {}
         v2.callback = typeof(v2.callback) == 'function' and v2.callback or function() end
 
-        local size = 36 + (24 * tableLen(v2.options))
+        local size = 36 + (24 * table.len(v2.options))
 
         local tsize = (game:service('TextService'):GetTextSize(v2.text, 13, 'Gotham', Vector2.new(math.huge, math.huge))).X / 2
 
@@ -834,7 +807,7 @@ local create = { --all ui library features
         end
 
         local c = 0
-        for a=1,tableLen(v2.options) do
+        for a=1,table.len(v2.options) do
             local v = v2.options[a]
 
             c = c + 1
@@ -877,7 +850,7 @@ local create = { --all ui library features
                 })
             })
 
-            if c < tableLen(v2.options) then
+            if c < table.len(v2.options) then
                 instance('Frame', {
                     Parent = frame,
                     Size = udim2(1, -16, 0, 1),
@@ -938,7 +911,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -1118,7 +1091,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -1254,7 +1227,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -1873,7 +1846,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -2122,7 +2095,7 @@ local create = { --all ui library features
                 dropMain.Visible = true
                 dropMain.Position = udim2(0, body.AbsolutePosition.X + 350, 0, body.AbsolutePosition.Y)
                 ts(dropMain, {0.3, 'Exponential'}, {
-                    Size = udim2(0, 200, 0, 18 + (tableLen(v2.options) * 26))
+                    Size = udim2(0, 200, 0, 18 + (table.len(v2.options) * 26))
                 })
                 ts(body.Frame.TextLabel, {0.2, 'Exponential'}, {
                     TextTransparency = 1,
@@ -2196,7 +2169,7 @@ local create = { --all ui library features
             repeat
                 wait()
                 tip = getgenv().tipMenu
-            until tableLen(getgenv().tipMenu) == 3
+            until table.len(getgenv().tipMenu) == 3
         end)
         
         local toolTipActive = false
@@ -2218,50 +2191,71 @@ local create = { --all ui library features
         body.Parent = obj
     end,
     textlabel = function(v2, data, obj)
-        v2.text = typeof(v2.text) == 'string' and v2.text or '[empty textlabel name]'
-        v2.align = typeof(v2.align) == 'string' and v2.align or 'center'
+        v2.text = typeof(v2.text) == "string" and v2.text or "[empty textlabel name]"
+        v2.align = typeof(v2.align) == "string" and v2.align or "center"
         v2.align = v2.align:lower()
-        v2.color = typeof(v2.color) == 'Color3' and v2.color or Color3.new(1, 1, 1)
-        v2.thickness = typeof(v2.thickness) == 'number' and v2.thickness or 1
-        v2.updTable = typeof(v2.updTable) == 'table' and v2.updTable or nil
+        v2.color = typeof(v2.color) == "Color3" and v2.color or Color3.new(1, 1, 1)
+        v2.thickness = typeof(v2.thickness) == "number" and v2.thickness or 1
+        v2.updTable = typeof(v2.updTable) == "table" and v2.updTable or nil
+
+        local function getFont(thickness)
+            return thickness == 1 and Enum.Font.Gotham
+                or thickness == 2 and Enum.Font.GothamMedium
+                or thickness == 3 and Enum.Font.GothamBold
+                or Enum.Font.GothamBlack
+        end
 
         local id = v2.text
 
-        local body = instance('Frame', {
+        local body = instance("Frame", {
             Size = udim2(1, 0, 0, 30),
             BackgroundTransparency = 1,
         }, {
-            instance('TextLabel', {
-                Name = 'text',
+            instance("TextLabel", {
+                Name = "text",
                 TextSize = 15,
-                Font = v2.thickness == 1 and 'Gotham' or v2.thickness == 2 and 'GothamMedium' or v2.thickness == 3 and 'GothamBold' or v2.thickness == 4 and 'GothamBlack',
+                Font = getFont(v2.thickness),
                 TextColor3 = v2.color,
                 BackgroundTransparency = 1,
                 Text = v2.text,
-                RichText = true,
-                TextColor3 = v2.color,
-                Size = v2.align == 'center' and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0),
-                Position = udim2(0, v2.align == 'left' and 10 or 0, 0, 0),
-                TextXAlignment = v2.align == 'center' and 'Center' or v2.align == 'left' and 'Left' or v2.align == 'right' and 'Right'
+                Size = v2.align == "center" and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0),
+                Position = udim2(0, v2.align == "left" and 10 or 0, 0, 0),
+                TextXAlignment =
+                    v2.align == "center" and Enum.TextXAlignment.Center
+                    or v2.align == "left" and Enum.TextXAlignment.Left
+                    or Enum.TextXAlignment.Right
             })
         })
 
         if v2.updTable then
             v2.updTable[id] = function(data1)
-                local text = typeof(data1.text) == 'string' and data1.text or v2.text
-                local color = typeof(data1.color) == 'Color3' and data1.color or v2.color
-                local align = typeof(data1.align) == 'string' and data1.align or v2.align
-                align = align:lower()
-                local thickness = typeof(data1.thickness) == 'number' and data1.thickness or 1
+                if typeof(data1) ~= "table" then return end
 
-                body.text.Text = tostring(data1.text)
-                body.text.TextXAlignment = align == 'center' and 'Center' or align == 'left' and 'Left' or align == 'right' and 'Right'
-                body.text.Font = thickness == 1 and 'Gotham' or thickness == 2 and 'GothamMedium' or thickness == 3 and 'GothamBold' or thickness == 4 and 'GothamBlack',
-                ts(body.text, {0.3, 'Exponential'}, {
-                    TextColor3 = color,
-                    Size = align == 'center' and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0),
-                    Position = udim2(0, align == 'left' and 10 or 0, 0, 0),
-                })
+                local text = typeof(data1.text) == "string" and data1.text or v2.text
+                local color = typeof(data1.color) == "Color3" and data1.color or v2.color
+                local align = typeof(data1.align) == "string" and data1.align:lower() or v2.align
+                local thickness = typeof(data1.thickness) == "number" and data1.thickness or v2.thickness
+
+                body.text.Text = tostring(text)
+                body.text.TextXAlignment =
+                    align == "center" and Enum.TextXAlignment.Center
+                    or align == "left" and Enum.TextXAlignment.Left
+                    or Enum.TextXAlignment.Right
+                body.text.Font = getFont(thickness)
+
+                -- SAFE ts CALL
+                if typeof(ts) == "function" then
+                    ts(body.text, {0.3, "Exponential"}, {
+                        TextColor3 = color,
+                        Size = align == "center" and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0),
+                        Position = udim2(0, align == "left" and 10 or 0, 0, 0),
+                    })
+                else
+                    -- fallback (no tween)
+                    body.text.TextColor3 = color
+                    body.text.Size = align == "center" and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0)
+                    body.text.Position = udim2(0, align == "left" and 10 or 0, 0, 0)
+                end
 
                 v2.text = text
                 v2.color = color
@@ -2269,14 +2263,8 @@ local create = { --all ui library features
                 v2.thickness = thickness
             end
         end
-        print(body.Text)
+
         body.Parent = obj
-        local d = {}
-        function d:SetText(str)
-            body.Text = tostring(str)
-        end
-        
-        return d
     end,
     locked = function(v2, data, obj)
         v2.text = typeof(v2.text) == 'string' and v2.text or '[empty name]'
@@ -2395,11 +2383,11 @@ local function new(data) --main library function
     })
 
 
-    -- blurModule:BindFrame(toolTip.blur, {
-    --     Transparency = 0.999,
-    --     Material = 'Glass',
-    --     Color = rgb(255, 255, 255)
-    -- })
+    blurModule:BindFrame(toolTip.blur, {
+        Transparency = 0.999,
+        Material = 'Glass',
+        Color = rgb(255, 255, 255)
+    })
 
     getgenv().tipMenu = {
         open = function()
@@ -2736,13 +2724,13 @@ local function new(data) --main library function
         })
         dragify(tabWindow)
 
-        -- if data.theme.blur == true then
-        --     blurModule:BindFrame(tabWindow.blur, {
-        --         Transparency = 0.999,
-        --         Material = 'Glass',
-        --         Color = rgb(255, 255, 255)
-        --     })
-        -- end
+        if data.theme.blur == true then
+            blurModule:BindFrame(tabWindow.blur, {
+                Transparency = 0.999,
+                Material = 'Glass',
+                Color = rgb(255, 255, 255)
+            })
+        end
 
         local cont = tabWindow.container.ScrollingFrame
 
@@ -3007,15 +2995,15 @@ local function new(data) --main library function
                 function(self)
                     if data.theme.blur == true then
                         spawn(function()
-                            -- repeat
-                            --     local a = pcall(function()
-                            --         blurModule:BindFrame(self, {
-                            --             Transparency = 0.999,
-                            --             Material = 'Glass',
-                            --             Color = rgb(255, 255, 255)
-                            --         })
-                            --     end)
-                            -- until a
+                            repeat
+                                local a = pcall(function()
+                                    blurModule:BindFrame(self, {
+                                        Transparency = 0.999,
+                                        Material = 'Glass',
+                                        Color = rgb(255, 255, 255)
+                                    })
+                                end)
+                            until a
                         end)
                     end
                 end
