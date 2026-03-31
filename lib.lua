@@ -1,4 +1,4 @@
---> CREDITS to Cappuccino v6 by blu, hiiii <3
+--> CREDITS to Cappuccino v6 by blu
 
 getgenv().version = 'v1.1'
 print('UI library made by boop71 // version: '..version)
@@ -65,39 +65,6 @@ for a,v in next, bKeys do
 end
 bKeys = p
 p = nil
-
-if not isfolder('cappuccino-v6') then
-    makefolder('cappuccino-v6')
-end
-
-if not cap then
-    getgenv().cap = {
-        write = function(fileName, content)
-            writefile(('cappuccino-v6/%s'):format(fileName), content)
-        end,
-        read = function(fileName)
-            return readfile(('cappuccino-v6/%s'):format(fileName))
-        end,
-        isfile = function(fileName)
-            return isfile(('cappuccino-v6/%s'):format(fileName))
-        end
-    }
-end
-
-if not cap.isfile('ui_settings.json') then
-    cap.write('ui_settings.json', json.encode({
-        theme = {124, 170, 255},
-        rainbowSpeed = 15,
-        blurLevel = 0.8,
-        protectUi = false,
-        showWatermark = false,
-        hidePremium = false,
-        tabAlignment = 'Left',
-        tabRoundness = 16,
-    }))
-end
-
-local gd = json.decode(cap.read('ui_settings.json'))
 
 local mouse = game:service('Players').LocalPlayer:GetMouse()
 
@@ -2239,6 +2206,7 @@ local create = { --all ui library features
                 TextColor3 = v2.color,
                 BackgroundTransparency = 1,
                 Text = v2.text,
+                RichText = true,
                 TextColor3 = v2.color,
                 Size = v2.align == 'center' and udim2(1, 0, 1, 0) or udim2(1, -10, 1, 0),
                 Position = udim2(0, v2.align == 'left' and 10 or 0, 0, 0),
@@ -2575,8 +2543,8 @@ local function new(data) --main library function
                                         Position = s and udim2(0, 6, 0, 56) or udim2(0, 6, 0, 26)
                                     })
                                     ts(p, {0.27, 'Exponential'}, {
-                                       Position = s and udim2(1, -23, 0, 0) or udim2(1, -17, 0, -3),
-                                       Size = s and udim2(0, 20, 0, 24) or udim2(0, 20, 0, 20)
+                                    Position = s and udim2(1, -23, 0, 0) or udim2(1, -17, 0, -3),
+                                    Size = s and udim2(0, 20, 0, 24) or udim2(0, 20, 0, 20)
                                     })
                                     ts(p.Parent.mag, {0.27, 'Exponential'}, {
                                         Position = s and udim2(1, -20, 0.5, -14/2) or udim2(1, -14, 0.5, -14/2)
@@ -3026,4 +2994,4 @@ local function new(data) --main library function
     end
 end
 
-return new 
+return new
